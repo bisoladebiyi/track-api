@@ -1,5 +1,5 @@
 import calendar
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import UUID
 from collections import defaultdict
@@ -10,7 +10,7 @@ from app.models import (
     UserProfile, PasswordChangeRequest
 )
 from app.services import verify_old_password
-from app.config import supabase, origins
+from app.config import supabase, origins, get_supabase_admin_client
 
 api = FastAPI()
 
@@ -164,7 +164,7 @@ def delete_application(id: UUID):
         raise HTTPException(status_code=500, detail=str(e))
 
 @api.put("/api/user/{id}")
-def edit_user(id: UUID, updated_user_data: UserProfile):
+def edit_user(id: UUID, updated_user_data: UserProfile, supabase=Depends(get_supabase_admin_client)):
     try:
         response = supabase.auth.admin.update_user_by_id(
             str(id),
@@ -181,7 +181,7 @@ def edit_user(id: UUID, updated_user_data: UserProfile):
         raise HTTPException(status_code=500, detail=str(e))
 
 @api.delete("/api/user/{id}")
-def delete_user(id: UUID):
+def delete_user(id: UUID, supabase=Depends(get_supabase_admin_client)):
     try:
         supabase.auth.admin.delete_user(str(id), True)
         supabase.table("Applications").delete().eq("uid", id).execute()
@@ -190,7 +190,7 @@ def delete_user(id: UUID):
         raise HTTPException(status_code=500, detail=str(e))
     
 @api.put("/api/change-password/{id}")
-def change_password(id: UUID, data: PasswordChangeRequest):
+def change_password(id: UUID, data: PasswordChangeRequest, supabase=Depends(get_supabase_admin_client)):
     try:
         user = supabase.auth.admin.get_user_by_id(str(id))
         email = user.user.email if user and user.user else None

@@ -9,3 +9,8 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+def get_supabase_admin_client():
+    # supabase "User not allowed" bug fix
+    client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    return client

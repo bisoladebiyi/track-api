@@ -1,4 +1,4 @@
-from app.api import api
+from app.api import api as app
 
 if __name__ == "__main__":
     import uvicorn

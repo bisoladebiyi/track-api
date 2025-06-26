@@ -1,0 +1,50 @@
+.env*
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.venv/
+env/
+ENV/
+pip-log.txt
+
+# Supabase CLI (if used)
+.supabase/
+
+# Pytest / test outputs
+.cache/
+*.cover
+*.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+
+# VS Code / editor configs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp
+
+# mypy / type checkers
+.mypy_cache/
+.dmypy.json
+.pyre/
+
+# Pydantic-generated artifacts (optional)
+__pydantic__/  # if using compiled models
+
+# Uvicorn reload artifacts (optional)
+*.pid
+.env
+.vercel
